@@ -245,7 +245,12 @@ var _ = Describe("static Operations", func() {
 				"type": "ipvlan",
 				"master": "foo0",
 				"ipam": {
-					"type": "static"
+					"type": "ipams",
+					"ipams": [
+					  	{
+							"type": "static"
+						}
+					]
 				}
 			}`, ver)
 
@@ -702,10 +707,10 @@ var _ = Describe("static Operations", func() {
 				"ipam": {
 					"type": "ipams",
 					"ipams": [
-					  {
-						"type": "static",
-						"routes": [{ "dst": "0.0.0.0/0" }]
-					  }
+						{
+							"type": "static",
+							"routes": [{ "dst": "0.0.0.0/0" }]
+					  	}
 					]
 				},
 				"RuntimeConfig": {

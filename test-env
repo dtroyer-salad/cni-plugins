@@ -1,0 +1,3 @@
+# Configure sandbox CNI environment
+export NETCONFPATH=${PWD}/test-net.d
+export CNI_PATH=${PWD}/bin
