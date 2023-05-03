@@ -19,7 +19,6 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"os"
 
 	"github.com/containernetworking/cni/pkg/skel"
 	"github.com/containernetworking/cni/pkg/types"
@@ -139,12 +138,12 @@ type RequestOption struct {
 }
 
 func main() {
-	f, err := os.OpenFile("/tmp/ipams.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f.Close()
-	log.SetOutput(f)
+	// f, err := os.OpenFile("/tmp/ipams.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// defer f.Close()
+	// log.SetOutput(f)
 
 	skel.PluginMain(cmdAdd, cmdCheck, cmdDel, version.All, bv.BuildString("ipams"))
 }
@@ -209,7 +208,7 @@ func cmdAdd(args *skel.CmdArgs) error {
 			// log.Printf("Failed to make %s JSON: %s\n", i.Type, err)
 			return err
 		}
-		log.Printf("%s subJSON: %s\n", i.Type, subJSON)
+		// log.Printf("%s subJSON: %s\n", i.Type, subJSON)
 
 		// Run the IPAM plugin and get back the config to apply
 		subResult, err := ipam.ExecAdd(i.Type, subJSON)
@@ -232,7 +231,7 @@ func cmdAdd(args *skel.CmdArgs) error {
 			// log.Printf("Failed to get result %s add: %s\n", i.Type, err)
 			return err
 		}
-		log.Printf("result: %+v\n", result)
+		// log.Printf("result: %+v\n", result)
 
 		// Merge results
 		mergedResult.CNIVersion = result.CNIVersion
@@ -255,7 +254,7 @@ func cmdAdd(args *skel.CmdArgs) error {
 			mergedResult.DNS.Options = append(mergedResult.DNS.Options, opt)
 		}
 	}
-	log.Printf("mergedResult: %+v\n", mergedResult)
+	// log.Printf("mergedResult: %+v\n", mergedResult)
 
 	return types.PrintResult(mergedResult, mergedResult.CNIVersion)
 }
