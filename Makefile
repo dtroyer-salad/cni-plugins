@@ -38,4 +38,4 @@ del:
 
 clean:
 	$(SUDO) ip netns del testing
-	$(SUDO) rm -rf /var/lib/cni/networks/* /tmp/ipams.log
+	$(SUDO) rm -rf /var/lib/cni/networks/* /tmp/ipams.log /tmp/ptp.log

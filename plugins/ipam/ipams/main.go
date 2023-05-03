@@ -235,6 +235,7 @@ func cmdAdd(args *skel.CmdArgs) error {
 		log.Printf("result: %+v\n", result)
 
 		// Merge results
+		mergedResult.CNIVersion = result.CNIVersion
 		for _, ifc := range result.Interfaces {
 			mergedResult.Interfaces = append(mergedResult.Interfaces, ifc)
 		}
