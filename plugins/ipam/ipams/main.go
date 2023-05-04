@@ -19,6 +19,8 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
+	"strings"
 
 	"github.com/containernetworking/cni/pkg/skel"
 	"github.com/containernetworking/cni/pkg/types"
@@ -184,6 +186,19 @@ func getSubJSON(conf *NetList, ipam *IPAMConfig) ([]byte, error) {
 	return subJSON, err
 }
 
+// Remove CNI_ARGS from environment
+func cleanEnv() error {
+	cniArgs := os.Getenv("CNI_ARGS")
+	var newArgs []string
+	for _, kv := range strings.Split(cniArgs, ";") {
+		env := strings.Split(kv, "=")
+		if env[0] != "IP" {
+			newArgs = append(newArgs, kv)
+		}
+	}
+	return os.Setenv("CNI_ARGS", strings.Join(newArgs, ";"))
+}
+
 func cmdAdd(args *skel.CmdArgs) error {
 	// log.Printf("Starting ipams CNI: add\n")
 	conf, err := parseConfig(args.StdinData)
@@ -209,6 +224,9 @@ func cmdAdd(args *skel.CmdArgs) error {
 			return err
 		}
 		// log.Printf("%s subJSON: %s\n", i.Type, subJSON)
+
+		// Filter the environment passed to the sub-plugin
+		cleanEnv()
 
 		// Run the IPAM plugin and get back the config to apply
 		subResult, err := ipam.ExecAdd(i.Type, subJSON)
